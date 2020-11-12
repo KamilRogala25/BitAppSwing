@@ -1,4 +1,4 @@
-package com.example.BitApp.Exceptions;
+package BitApp.Exceptions;
 
 public class DirectoryIsEmptyExcepion extends Exception {
     public DirectoryIsEmptyExcepion(String message) {

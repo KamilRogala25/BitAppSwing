@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BitApp:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BitApp_jar</output-path>
+    <root id="archive" name="BitApp.jar">
+      <element id="module-output" name="BitApp" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.5/commons-io-2.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

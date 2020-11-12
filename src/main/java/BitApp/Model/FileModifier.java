@@ -1,8 +1,8 @@
-package com.example.BitApp.Model;
+package BitApp.Model;
 
 
-import com.example.BitApp.Exceptions.DirectoryIsEmptyExcepion;
-import com.example.BitApp.Exceptions.SelectionIsEmptyException;
+import BitApp.Exceptions.DirectoryIsEmptyExcepion;
+import BitApp.Exceptions.SelectionIsEmptyException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,9 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,9 +75,18 @@ public class FileModifier {
     public void createBackup(List<File> toCopy) throws IOException {
 
         String backupPath = "D:\\Applications\\BitApp\\Backups\\";
+        LocalDateTime localDateTime = LocalDateTime.now();
+        StringBuilder backupPathBuilder = new StringBuilder("");
+        backupPathBuilder.append(localDateTime.getYear());
+        backupPathBuilder.append(localDateTime.getMonth());
+        backupPathBuilder.append(localDateTime.getDayOfMonth());
+        backupPathBuilder.append(localDateTime.getHour());
+        backupPathBuilder.append(localDateTime.getMinute());
+        backupPathBuilder.append(localDateTime.getSecond());
+        String folderName = backupPathBuilder.toString();
         List<File> backup = new ArrayList<>();
         for (File file : toCopy) {
-            String newPath = backupPath + file.getAbsolutePath().substring(3);
+            String newPath = backupPath + folderName + "\\" + file.getAbsolutePath().substring(3);
             backup.add(new File(newPath));
             FileUtils.copyFile(file, new File(newPath));
         }
