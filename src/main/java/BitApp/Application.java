@@ -1,7 +1,6 @@
 package BitApp;
 
-import BitApp.Exceptions.SelectionIsEmptyException;
-import BitApp.Model.FileModifier;
+import BitApp.model.ByteWritter;
 import lombok.SneakyThrows;
 
 import javax.swing.*;
@@ -30,20 +29,17 @@ public class Application extends JFrame {
 
     public Application() {
         executeButton.addActionListener(new ActionListener() {
-            FileModifier fileModifier = new FileModifier();
+            ByteWritter byteWritter = new ByteWritter();
             @SneakyThrows
             @Override
             public void actionPerformed(ActionEvent e) {
-//                if (path.toString().isEmpty() || extension.toString().isEmpty() || toFindSequ.toString().isEmpty() || toReplaceSequ.toString().isEmpty()) {
-//                    throw new SelectionIsEmptyException("Pola są puste. Wprowadź poprawne dane.");
-//                    return;
-//                }
                 String pathString = path.getText();
                 String extensionString = extension.getText();
                 String toFindString = toFindSequ.getText();
                 String toReplaceString = toReplaceSequ.getText();
-                String message = fileModifier.modifyFiles(pathString,extensionString,toFindString,toReplaceString);
-                JOptionPane.showMessageDialog(null, message + " Utworzono backup w lokalizacji D:\\Applications\\BitApp\\Backups");
+                byteWritter.modifyFiles(pathString,extensionString,toFindString,toReplaceString);
+                JOptionPane.showMessageDialog(null, byteWritter.getReport() );
+                byteWritter.clearReport();
             }
         });
     }

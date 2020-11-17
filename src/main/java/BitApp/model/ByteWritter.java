@@ -1,8 +1,8 @@
-package BitApp.Model;
+package BitApp.model;
 
 
-import BitApp.Exceptions.DirectoryIsEmptyExcepion;
-import BitApp.Exceptions.SelectionIsEmptyException;
+import BitApp.exceptions.DirectoryIsEmptyExcepion;
+import BitApp.exceptions.SelectionIsEmptyException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +14,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,10 +23,12 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class FileModifier {
+public class ByteWritter {
 
     private String path;
+    private Message message = new Message();
 
+    //Przeszukuje wskazaną lokalizację w poszukiwaniu plików
     public List<File> getAllFiles(String path) {
         File directory = new File(path);
         List<File> files = new ArrayList();
@@ -42,12 +42,13 @@ public class FileModifier {
         return files;
     }
 
+    //Przeszukuje wskazaną lokalizację w poszukiwaniu plików danego typu
     public List<File> getFilesOfExtension(String path, String extension) throws DirectoryIsEmptyExcepion, SelectionIsEmptyException {
         if (path.isEmpty()) {
             throw new SelectionIsEmptyException("Proszę wskazać poprawną ścieżkę.");
         }
-        FileModifier fileModifier = new FileModifier();
-        List<File> allFiles = fileModifier.getAllFiles(path);
+        ByteWritter byteWritter = new ByteWritter();
+        List<File> allFiles = byteWritter.getAllFiles(path);
         List<File> results = new ArrayList();
 
         for (File file : allFiles) {
@@ -62,6 +63,7 @@ public class FileModifier {
         return results;
     }
 
+    //Odczyt pojedynczego pliku
     public String readFile(String path) throws IOException, OutOfMemoryError {
         File file = new File(path);
         byte[] fileBytes = Files.readAllBytes(Paths.get(path));
@@ -72,6 +74,7 @@ public class FileModifier {
         return sb.toString();
     }
 
+    //Tworzenie backupu
     public void createBackup(List<File> toCopy) throws IOException {
 
         String backupPath = "D:\\Applications\\BitApp\\Backups\\";
@@ -90,40 +93,44 @@ public class FileModifier {
             backup.add(new File(newPath));
             FileUtils.copyFile(file, new File(newPath));
         }
-
+        message.addMessage("W lokalizacji " + folderName + " utworzono backup");
     }
 
+    //Zmiana sekwencji bajtów
     public String replaceSequence(String path, CharSequence toFindSequ, CharSequence toReplaceSequ) throws IOException {
         if (toFindSequ.length() > 80 || toReplaceSequ.length() > 80 || (toFindSequ.length() > 80 && toReplaceSequ.length() > 80)) {
+            message.addMessage("Nie rozpoczęto działania, Jedna z sekwencji jest za długa.");
             throw new IllegalStateException("Sekwencja jest za duża.");
         }
         if (toFindSequ.equals(toReplaceSequ)) {
+            message.addMessage("Nie rozpoczęto działania, sekwencje są takie same.");
             throw new IllegalStateException("Sekwencje są równe.");
         }
         if (path.isEmpty() || toFindSequ == null || toReplaceSequ == null) {
+            message.addMessage("Nie rozpoczęto działania, wprowadzono puste dane.");
             throw new IllegalStateException("Podano puste dane.");
         }
-        FileModifier fileModifier = new FileModifier();
+        ByteWritter fileModifier = new ByteWritter();
         String bytes = fileModifier.readFile(path);
         return bytes.replace(toFindSequ, toReplaceSequ);
 
     }
 
-
-    public String modifyFiles(String path, String extension, CharSequence toFindSequ, CharSequence toReplaceSequ) throws IOException, DirectoryIsEmptyExcepion, SelectionIsEmptyException {
-        FileModifier fileModifier = new FileModifier(path);
-        List<File> files = fileModifier.getFilesOfExtension(fileModifier.getPath(), extension);
+    //Dla danej lokalizacji zmienia sekwencję
+    public void modifyFiles(String path, String extension, CharSequence toFindSequ, CharSequence toReplaceSequ) throws IOException, DirectoryIsEmptyExcepion, SelectionIsEmptyException {
+        ByteWritter fileModifier = new ByteWritter();
+        List<File> files = fileModifier.getFilesOfExtension(path, extension);
         String tempBytes;
         fileModifier.createBackup(files);
-
-        int counterChanged = 0;
-        int counterUnChanged = 0;
+        message.addMessage("W lokalizacji D:\\Applications\\BitApp\\Backups\\ utworzono backup.");
 
         for (File file : files) {
             if (!files.isEmpty()) {
                 tempBytes = fileModifier.replaceSequence(file.getAbsolutePath(), toFindSequ, toReplaceSequ);
                 if (fileModifier.readFile(file.getAbsolutePath()).equals(tempBytes)) {
-                    counterUnChanged++;
+                    message.addMessage("Nie zmodyfikowano pliku " + file.getAbsolutePath());
+                    message.incrementNumberOfUnchangedFiles();
+
                 } else {
                     String tempPath = file.getAbsolutePath();
                     file.delete();
@@ -146,12 +153,25 @@ public class FileModifier {
                             e.printStackTrace();
                         }
                     }
-                    counterChanged++;
+                    message.addMessage("Zmodyfikowano plik " + file.getAbsolutePath());
+                    message.incrementNumberOfChangedFiles();
                 }
             }
         }
-        return "W lokalizacji " + path + ". Zmodyfikowano " + counterChanged + " plików typu " + extension + ". Nie zmodyfikowano " + counterUnChanged + " plików typu " + extension + ".";
+        message.addMessage("W lokalizacji " + path + ". Zmodyfikowano " + message.getNumberOfChangedFiles() + " plików typu " + extension + ".");
+        if (message.getNumberOfUnchangedFiles() > 0) {
+            message.addMessage("Nie zmodyfikowano " + message.getNumberOfUnchangedFiles() + " plików typu " + extension + ".");
+        }
+        message.resetNumberOfChanges();
     }
 
+    //Generuje raport z działania pliku
+    public String getReport() {
+        return message.getAllMessagesAsString();
+    }
+    //Czyści raport
+    public void clearReport(){
+        message.clearAllMessages();
+    }
 
 }

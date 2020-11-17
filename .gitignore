@@ -1,0 +1,8 @@
+# Project exclude paths
+/out/
+/target/
+/.idea/
+/BitApp.iml
+# Mavenlog
+/log/
+/target/
