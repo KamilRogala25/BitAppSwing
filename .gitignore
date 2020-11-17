@@ -3,6 +3,7 @@
 /target/
 /.idea/
 /BitApp.iml
+/config.xml
 # Mavenlog
 /log/
 /target/
