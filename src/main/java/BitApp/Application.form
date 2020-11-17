@@ -20,7 +20,7 @@
         <properties>
           <horizontalAlignment value="2"/>
           <horizontalTextPosition value="2"/>
-          <text value="Bitapp to narzędzie do edycji plików poprzez ciągi bitów. Aplikacja zmienia wszystkie pliki podanego typu we wskazanym folderze. W razie komplikacji, tworzony jest backup."/>
+          <text value="Bitapp to narzędzie do edycji plików poprzez ciągi bajtów. Aplikacja zmienia wszystkie pliki podanego typu we wskazanym folderze. W razie komplikacji, tworzony jest backup."/>
         </properties>
       </component>
       <component id="4380c" class="javax.swing.JTextField" binding="toFindSequ">
@@ -68,7 +68,7 @@
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Wprowadź szukany ciąg bitów"/>
+          <text value="Wprowadź szukany ciąg bajtów"/>
         </properties>
       </component>
       <component id="4da40" class="javax.swing.JLabel" binding="toReplaceSequDescription">
@@ -76,7 +76,7 @@
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Wprowadź nowy ciąg bitów"/>
+          <text value="Wprowadź nowy ciąg bajtów"/>
           <toolTipText value="Wprowadź nowy ciąg bitów"/>
         </properties>
       </component>
