@@ -20,13 +20,16 @@ import java.util.Arrays;
 import java.util.List;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class ByteWritter {
 
     private String path;
     private Message message = new Message();
+
+    public ByteWritter(String path) {
+        this.path = path;
+    }
 
     //Przeszukuje wskazaną lokalizację w poszukiwaniu plików
     public List<File> getAllFiles(String path) {
@@ -65,7 +68,6 @@ public class ByteWritter {
 
     //Odczyt pojedynczego pliku
     public String readFile(String path) throws IOException, OutOfMemoryError {
-        File file = new File(path);
         byte[] fileBytes = Files.readAllBytes(Paths.get(path));
         StringBuilder sb = new StringBuilder("");
         for (byte b : fileBytes) {
@@ -75,9 +77,7 @@ public class ByteWritter {
     }
 
     //Tworzenie backupu
-    public void createBackup(List<File> toCopy) throws IOException {
-
-        String backupPath = "D:\\Applications\\BitApp\\Backups\\";
+    public void createBackup(List<File> toCopy, String path) throws IOException {
         LocalDateTime localDateTime = LocalDateTime.now();
         StringBuilder backupPathBuilder = new StringBuilder("");
         backupPathBuilder.append(localDateTime.getYear());
@@ -89,7 +89,7 @@ public class ByteWritter {
         String folderName = backupPathBuilder.toString();
         List<File> backup = new ArrayList<>();
         for (File file : toCopy) {
-            String newPath = backupPath + folderName + "\\" + file.getAbsolutePath().substring(3);
+            String newPath = path + "\\BitApp\\Backups\\" + folderName + "\\" + file.getAbsolutePath().substring(3);
             backup.add(new File(newPath));
             FileUtils.copyFile(file, new File(newPath));
         }
@@ -121,7 +121,7 @@ public class ByteWritter {
         ByteWritter fileModifier = new ByteWritter();
         List<File> files = fileModifier.getFilesOfExtension(path, extension);
         String tempBytes;
-        fileModifier.createBackup(files);
+        fileModifier.createBackup(files, path);
         message.addMessage("W lokalizacji D:\\Applications\\BitApp\\Backups\\ utworzono backup.");
 
         for (File file : files) {
@@ -169,8 +169,9 @@ public class ByteWritter {
     public String getReport() {
         return message.getAllMessagesAsString();
     }
+
     //Czyści raport
-    public void clearReport(){
+    public void clearReport() {
         message.clearAllMessages();
     }
 
