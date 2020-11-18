@@ -30,6 +30,7 @@ public class Application extends JFrame {
     public Application() {
         executeButton.addActionListener(new ActionListener() {
             ByteWritter byteWritter = new ByteWritter();
+
             @SneakyThrows
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -37,9 +38,13 @@ public class Application extends JFrame {
                 String extensionString = extension.getText();
                 String toFindString = toFindSequ.getText();
                 String toReplaceString = toReplaceSequ.getText();
-                byteWritter.modifyFiles(pathString,extensionString,toFindString,toReplaceString);
-                JOptionPane.showMessageDialog(null, byteWritter.getReport() );
-                byteWritter.clearReport();
+                if (pathString.isEmpty() || extensionString.isEmpty() || toFindString.isEmpty() || toReplaceString.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Jedno lub więcej pól jest puste. Proszę sprawdzić dane");
+                } else {
+                    byteWritter.modifyFiles(pathString, extensionString, toFindString, toReplaceString);
+                    JOptionPane.showMessageDialog(null, byteWritter.getReport());
+                    byteWritter.clearReport();
+                }
             }
         });
     }
