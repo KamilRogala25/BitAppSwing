@@ -138,7 +138,7 @@ public class ByteWritter {
                     File resultFile = new File(tempPath);
                     FileOutputStream fos = null;
                     try {
-                        fos = new FileOutputStream(resultFile);
+                        fos = new FileOutputStream(resultFile,false);
                         fos.write(result);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
