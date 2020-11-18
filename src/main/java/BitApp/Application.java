@@ -6,6 +6,8 @@ import lombok.SneakyThrows;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.List;
 
 public class Application extends JFrame {
     private JTextField toFindSequ;
@@ -38,9 +40,27 @@ public class Application extends JFrame {
                 String extensionString = extension.getText();
                 String toFindString = toFindSequ.getText();
                 String toReplaceString = toReplaceSequ.getText();
+//                List<File> allFiles = byteWritter.getAllFiles(pathString);
+//                List<File> extensionFiles = byteWritter.getFilesOfExtension(pathString,extensionString);
                 if (pathString.isEmpty() || extensionString.isEmpty() || toFindString.isEmpty() || toReplaceString.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Jedno lub więcej pól jest puste. Proszę sprawdzić dane");
-                } else {
+                    JOptionPane.showMessageDialog(null, "Jedno lub więcej pól jest puste. Proszę sprawdzić wprowadzone dane.");
+                }
+                if (!pathString.contains(":") || !pathString.contains("\\")) {
+                    JOptionPane.showMessageDialog(null, "Scieżka dostępu jest niepoprawna. Proszę sprawdzić wprowadzone dane.");
+                }
+                if (toFindString.equals(toReplaceString)) {
+                    JOptionPane.showMessageDialog(null, "Sekwencje są identyczne. Proszę sprawdzić wprowadzone dane.");
+                }
+                if (toFindString.length() > 80 || toReplaceString.length() > 80) {
+                    JOptionPane.showMessageDialog(null, "Jedna lub więcej sekwencji jest za długa. Proszę sprawdzić wprowadzone dane.");
+                }
+                if (byteWritter.getAllFiles(pathString).isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Wskazany folder jest pusty. Proszę sprawdzić wprowadzone dane.");
+                }
+                if (!byteWritter.getAllFiles(pathString).contains(extensionString)){
+                    JOptionPane.showMessageDialog(null, "Wskazany folder nie zawiera plików z danym rozszerzeniem. Proszę sprawdzić wprowadzone dane.");
+                }
+                else {
                     byteWritter.modifyFiles(pathString, extensionString, toFindString, toReplaceString);
                     JOptionPane.showMessageDialog(null, byteWritter.getReport());
                     byteWritter.clearReport();

@@ -61,7 +61,7 @@ public class ByteWritter {
             }
         }
         if (results.isEmpty()) {
-            throw new DirectoryIsEmptyExcepion("Nie znaleziono żadnego pliku typu" + extension + ".");
+            throw new DirectoryIsEmptyExcepion("Nie znaleziono żadnego pliku typu " + extension + ".");
         }
         return results;
     }
