@@ -40,8 +40,6 @@ public class Application extends JFrame {
                 String extensionString = extension.getText();
                 String toFindString = toFindSequ.getText();
                 String toReplaceString = toReplaceSequ.getText();
-//                List<File> allFiles = byteWritter.getAllFiles(pathString);
-//                List<File> extensionFiles = byteWritter.getFilesOfExtension(pathString,extensionString);
                 if (pathString.isEmpty() || extensionString.isEmpty() || toFindString.isEmpty() || toReplaceString.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Jedno lub więcej pól jest puste. Proszę sprawdzić wprowadzone dane.");
                 }
