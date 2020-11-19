@@ -2,6 +2,7 @@ package BitApp;
 
 import BitApp.model.ByteWritter;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -55,7 +56,7 @@ public class Application extends JFrame {
                 if (byteWritter.getAllFiles(pathString).isEmpty()){
                     JOptionPane.showMessageDialog(null, "Wskazany folder jest pusty. Proszę sprawdzić wprowadzone dane.");
                 }
-                if (!byteWritter.getAllFiles(pathString).contains(extensionString)){
+                if (byteWritter.getAllFiles(pathString).stream().filter(file -> file.getAbsolutePath().endsWith(extensionString)).count()==0){
                     JOptionPane.showMessageDialog(null, "Wskazany folder nie zawiera plików z danym rozszerzeniem. Proszę sprawdzić wprowadzone dane.");
                 }
                 else {
